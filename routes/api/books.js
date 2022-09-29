@@ -4,20 +4,22 @@ const ctrl = require("../../controllers/books")
 
 const {ctrlWrapper} = require("../../helpers")
 
-const {validateBody} = require("../../middlewares")
+const {validateBody, isValidId} = require("../../middlewares")
 
-const schemas = require("../../schemas/book")
+const {schemas} = require("../../models/book");
 
 const router = express.Router();
 
 router.get("/", ctrlWrapper(ctrl.getAll));
 
-router.get("/:id", ctrlWrapper(ctrl.getById));
+router.get("/:id", isValidId, ctrlWrapper(ctrl.getById));
 
-router.post("/", validateBody(schemas.addSchema), ctrlWrapper(ctrl.add));
+router.post("/",  validateBody(schemas.addSchema), ctrlWrapper(ctrl.add));
 
-router.put("/:id", validateBody(schemas.addSchema), ctrlWrapper(ctrl.updateById));
+router.put("/:id", isValidId, validateBody(schemas.addSchema), ctrlWrapper(ctrl.updateById));
 
-router.delete("/:id", ctrlWrapper(ctrl.removeById));
+router.patch("/:id/favorite", isValidId, validateBody(schemas.updateFavoriteSchema), ctrlWrapper(ctrl.updateFavorite));
+
+router.delete("/:id", isValidId, ctrlWrapper(ctrl.removeById));
 
 module.exports = router;
