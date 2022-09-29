@@ -1,10 +1,11 @@
-const books = require("../../models/books")
+const {Book} = require("../../models/book");
 
 const {RequestError} = require("../../helpers")
 
 const getById = async(req, res) => {
     const {id} = req.params;
-    const result = await books.getById(id);
+    // const result = await Book.findOne({_id: id});
+    const result = await Book.findById(id);
     if(!result) {
         throw RequestError(404, "Not found");
     }
